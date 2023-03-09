@@ -37,8 +37,8 @@ def mean_dwt(image_1, image_2):
     
     return image_final
 
-img1 = "Images/testmap.png"
-img2 = "Images/changed_map.png"
+img1 = "../Images/testmap.png"
+img2 = "../Images/changed_map.png"
 
 wn_amean = "Image Arithmetic"
 wn_gmean = "Image Gaussian"
