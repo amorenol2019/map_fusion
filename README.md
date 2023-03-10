@@ -45,3 +45,4 @@ Estos algoritmos sólo se pueden usar sobre imágenes que sean iguales y simplem
 
 ## Referencias
 [^1]:https://repositorio.upct.es/bitstream/handle/10317/3429/pfc5406.pdf%3Bjses
+[^2]:https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html
