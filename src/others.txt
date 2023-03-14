@@ -1,0 +1,99 @@
+ref_matched = np.float32([kp1[m[0].queryIdx].pt for m in good_matches])
+sensed_matched = np.float32([kp2[m[0].trainIdx].pt for m in good_matches])
+
+M, mask = cv2.findHomography(ref_matched, sensed_matched, cv2.RANSAC, 5.0)
+h,w,d = img1.shape
+warped = cv2.warpPerspective(img1, M, (w, h))
+
+plt.imshow(warped)
+plt.show()
+
+matches = bf.knnMatch(des1, des2, k=2)
+
+good_matches = []
+for m,n in matches:
+    if m.distance < 0.75*n.distance:
+        good_matches.append([m])
+
+ref_matched_kpts = np.float32([kp1[m[0].queryIdx].pt for m in good_matches])
+sensed_matched_kpts = np.float32([kp2[m[0].trainIdx].pt for m in good_matches])
+
+
+height = img2.shape[0]
+width = img1.shape[1]
+# move both images to the center a bit
+corners = np.float32([[0, 0], [0, height], [width, 0], [width, height]])
+corners_moved = np.float32([[5, 5], [5, height + 5], [5 + width, 5], [5 + width, 5 + height]])
+
+# Compute homography
+H = cv2.getPerspectiveTransform(corners, corners_moved) #, cv2.RANSAC,5.0)
+
+# Warp image
+warped_image_1 = cv2.warpPerspective(img1, H, (img1.shape[1], img1.shape[0]), cv2.INTER_AREA)
+
+warped_image_2 = cv2.warpPerspective(img2, H, (img2.shape[1], img2.shape[0]), cv2.INTER_AREA)
+
+dest = cv2.addWeighted(warped_image_1, 1, warped_image_2, 1, 0.0)
+cv2.imshow('warped.jpg', dest)
+
+# Draw first 50 matches.
+
+FlannBasedMatcher matcher(new cv::flann::KDTreeIndexParams(4), new 
+cv::flann::SearchParams())
+
+//To get the homography matrix:
+vector<Point2f> imgPtsA, imgPtsB;
+for(int i=0;i<matches.size();i++){
+    imgPtsB.push_back(keypointsB[matches[i].queryIdx].pt);
+    imgPtsA.push_back(keypointsA[matches[i].trainIdx].pt);
+}
+Mat H=findHomography(imgPtsA, imgPtsB, CV_RANSAC);
+ 
+//To a warp right image:
+warpPerspective(rightImg, warpRight, H, rightImg.size());
+
+# closing all open windows
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+
+FUNCIONES
+
+Calculate homography
+Function to calculate the homography matrix from point corresspondences using Direct Linear Transformation
+The resultant homography transforms points in image B into points in image A
+Homography H = [h1 h2 h3; 
+                h4 h5 h6;
+                h7 h8 h9]
+u, v ---> point in image A
+x, y ---> matched point in image B then,
+with n point correspondences the DLT equation is:
+    A.h = 0
+where A = [-x1 -y1 -1 0 0 0 u1*x1 u1*y1 u1;
+           0 0 0 -x1 -y1 -1 v1*x1 v1*y1 v1;
+           ...............................;
+           ...............................;
+           -xn -yn -1 0 0 0 un*xn un*yn un;
+           0 0 0 -xn -yn -1 vn*xn vn*yn vn]
+This equation is then solved using SVD
+(At least 4 point correspondences are required to determine 8 unkwown parameters of homography matrix)
+
+
+
+matches = []
+for m in rawMatches:
+    if (len(m)) == 2 and m[0].distance < m[1].distance * 0.75:
+        matches.append((m[0].trainIdx, m[0].queryIdx))
+
+if (len(matches) > 4) :
+    matches_1 = np.float32([kp1[i] for (_, i) in matches])
+    matches_2 = np.float32([kp2[i] for (i, _) in matches])
+
+max_x = 0
+for i in range(len(matches_1)):
+    if (matches_1[i][0] > max_x) :
+        max_x = matches_1[i][0]
+print(max_x)
+
+H, mask = cv2.findHomography(matches_1, matches_2, cv2.RANSAC, 4.0)
