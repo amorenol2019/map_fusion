@@ -7,17 +7,21 @@ This repo contains information about map_fusion in 2D. Part of my bachelor thesi
 - [x] Fuse matching image
 - [x] Descriptors
 - [x] Merge
+
       [x] Rotated image
       [x] Crop edges
 - [x] TF
+
       [x] Make TF for merged map
       [x] Merged map TF reading from original maps
 - [ ] Both rovers in RVIZ
+
       [x] Map Lamarr
       [ ] Map Mae
       [x] URDF scene
       [ ] Orbslam make 2 maps in separate TF
 - [ ] Compare results
+
       - [ ] Descriptors
       - [ ] Fusing image methods
 
