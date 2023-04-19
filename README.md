@@ -2,7 +2,7 @@
 
 This repo contains information about map_fusion in 2D. Part of my bachelor thesis.
 
-##To Do
+## To Do
 - [x] Map as image
 - [x] Fuse matching image
 - [x] Descriptors
